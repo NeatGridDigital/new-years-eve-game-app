@@ -177,7 +177,7 @@ html.player #wrap,html.player .rot{display:none!important}
 .pn{color:var(--mut);font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}.pt{font-size:22px;margin-bottom:12px}
 .popts{display:grid;gap:12px}.popts.four{grid-template-columns:1fr 1fr}.ptx{font-size:20px;font-weight:600;line-height:1.3;margin-bottom:16px}.pe{font-size:54px;text-align:center;margin:6px 0 14px}
 .po{min-height:110px;border-radius:20px;color:#fff;font-size:21px;font-weight:700;padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;line-height:1.2}
-.po b{font-size:30px}.po.c0{background:#E0457B}.po.c1{background:#2BA5A0}.po.c2{background:#D69A2D}.po.c3{background:#5B7FD6}
+.po b{font-size:30px}.po.c0{background:#E0457B}.po.c1{background:#2BA5A0}.po.c2{background:#D69A2D}.po.c3{background:#5B7FD6}.po.tT{background:#2E9E5B}.po.tF{background:#D8434A}
 .po.tap{transform:scale(.96);opacity:.8}
 .res{text-align:center;padding:12vh 10px 0;font-size:70px;font-weight:800}.res h2{font-family:"DM Serif",Georgia,serif;font-weight:400;font-size:36px;margin:6px 0}
 .res p{font-size:20px;color:var(--mut);font-weight:600}.res.ok{color:var(--ok)}.res.no{color:var(--bad)}.res.sent{color:var(--gold)}.res .sm{font-size:16px}
@@ -2655,7 +2655,7 @@ var qrcode = function() {
       else if (q.mine != null) h += '<div class="res sent">✓<h2>Answer sent</h2><p>' + esc(label(q, q.mine)) + "</p><p class=\"sm\">Look at the TV!</p></div>";
       else if (q.k === "emoji") h += '<p class="pt">What is it? Type your guess.</p><input id="pguess" maxlength="40" autocomplete="off" value="' + esc(P.typed) + '"><button class="pbtn" data-p="guess">Send</button>';
       else h += '<div class="popts' + (q.k === "mc" ? " four" : "") + '">' + q.o.map(function (o, j) { var v = q.k === "mc" ? j : q.k === "tf" ? (j === 0) : j;
-        return '<button class="po c' + j + '" data-p="ans" data-v="' + (q.k === "tf" ? (v ? "T" : "F") : j) + '">' + (q.k === "mc" ? "<b>" + "ABCD"[j] + "</b>" : "") + esc(o) + "</button>"; }).join("") + "</div>";
+        return '<button class="po c' + j + (q.k === "tf" ? (v ? " tT" : " tF") : "") + '" data-p="ans" data-v="' + (q.k === "tf" ? (v ? "T" : "F") : j) + '">' + (q.k === "mc" ? "<b>" + "ABCD"[j] + "</b>" : "") + esc(o) + "</button>"; }).join("") + "</div>";
       h += "</div>";
     }
     el().innerHTML = brand + h;
@@ -2961,10 +2961,10 @@ var qrcode = function() {
 
   // ------------------------------------------------------------ render + actions
   function render() {
+    mpSync();  // new question first: clears last answers so old names never show
     document.documentElement.setAttribute("data-mode", S.mode);
     var h = V.s === "home" ? home() : V.s === "setup" ? setup() : V.s === "q" ? quiz() : V.s === "res" ? results(V.back) : V.s === "ch" ? charades() : V.s === "wyr" ? wyr() : V.s === "count" ? countdown() : bingo();
     ST.innerHTML = h;
-    mpSync();
   }
   // ------------------------------------------------------------ play on phones
   function who(v) { return (window.MP && MP.on()) ? '<div class="who" data-mv=\'' + JSON.stringify(v) + '\'>' + MP.pills(v) + "</div>" : ""; }
